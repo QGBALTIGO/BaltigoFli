@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Site</title>
+</head>
+<body>
+    <h1>Conteúdo do arquivo JSON</h1>
+    <pre id="json-content"></pre>
+
+    <script>
+        fetch('seuarquivo.json') // Troque 'seuarquivo.json' pelo nome do seu arquivo
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('json-content').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => console.log('Erro ao carregar o arquivo JSON:', error));
+    </script>
+</body>
+</html>
