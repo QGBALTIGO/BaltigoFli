@@ -83,3 +83,38 @@ class StreamJob(Base):
     destination: Mapped[Destination] = relationship()
     media: Mapped[MediaAsset | None] = relationship()
     playlist: Mapped[Playlist | None] = relationship()
+
+
+class ShopNode(Base):
+    """A Windows desktop node used to operate the official TikTok LIVE Manager surface."""
+
+    __tablename__ = "shop_nodes"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
+    name: Mapped[str] = mapped_column(String(120))
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    hostname: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    agent_version: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    last_seen: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
+    obs_connected: Mapped[bool] = mapped_column(Boolean, default=False)
+    virtual_camera_active: Mapped[bool] = mapped_column(Boolean, default=False)
+    current_scene: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    capabilities_json: Mapped[str] = mapped_column(Text, default="{}")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
+
+
+class ShopCommand(Base):
+    """A small allow-listed command delivered to a paired Shop Cloud node."""
+
+    __tablename__ = "shop_commands"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
+    node_id: Mapped[str] = mapped_column(ForeignKey("shop_nodes.id", ondelete="CASCADE"), index=True)
+    action: Mapped[str] = mapped_column(String(64), index=True)
+    payload_json: Mapped[str] = mapped_column(Text, default="{}")
+    status: Mapped[str] = mapped_column(String(24), default="queued", index=True)
+    result_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    sent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
