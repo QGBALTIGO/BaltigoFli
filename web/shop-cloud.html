@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0d12" />
+  <title>Baltigo Shop Cloud</title>
+  <link rel="stylesheet" href="/shop-cloud.css" />
+</head>
+<body>
+  <section id="shop-auth" class="auth hidden">
+    <form id="shop-login" class="login-card">
+      <div class="logo">B</div>
+      <h1>Baltigo Shop Cloud</h1>
+      <p>Use o mesmo código de acesso do Baltigo Live.</p>
+      <label><span>Código de acesso</span><input id="shop-key" type="password" required autocomplete="current-password" /></label>
+      <button class="btn primary big" type="submit">Entrar</button>
+      <small id="shop-login-error" class="error hidden"></small>
+    </form>
+  </section>
+
+  <div id="shop-app" class="hidden">
+    <header class="header">
+      <a class="brand" href="/"><span class="logo small">B</span><span><strong>Shop Cloud</strong><small>TikTok Shop via desktop remoto</small></span></a>
+      <div class="header-actions"><button id="refresh" class="btn ghost">Atualizar</button><a href="/" class="btn ghost">Baltigo Live</a></div>
+    </header>
+
+    <main class="page">
+      <section class="intro">
+        <span class="eyebrow">TIKTOK SHOP</span>
+        <h1>Controle sua máquina de LIVE na nuvem.</h1>
+        <p>O TikTok continua sendo aberto no LIVE Manager oficial. O Baltigo só mantém a máquina, o OBS e a Câmera Virtual sob controle remoto.</p>
+      </section>
+
+      <div class="policy-note"><strong>Importante:</strong> Shop Cloud não é “anti-ban”. Ele muda onde o desktop roda; não altera as regras de conteúdo do TikTok Shop.</div>
+
+      <section id="empty-node" class="setup-card hidden">
+        <div class="step-icon">1</div>
+        <div><span class="eyebrow">PRIMEIRA VEZ</span><h2>Conecte uma máquina Windows</h2><p>Crie um pareamento e instale o agente nessa máquina. Você entra no TikTok diretamente no navegador remoto; sua senha não passa pelo Baltigo.</p></div>
+        <button id="create-node" class="btn primary">Criar pareamento</button>
+      </section>
+
+      <section id="node-area" class="hidden">
+        <div class="node-top">
+          <div><span class="eyebrow">MÁQUINA SHOP CLOUD</span><h2 id="node-name">—</h2></div>
+          <div id="node-online" class="pill">Verificando</div>
+        </div>
+
+        <div class="status-grid">
+          <article><span>Windows</span><strong id="status-windows">—</strong><small id="status-host">Aguardando agente</small></article>
+          <article><span>OBS</span><strong id="status-obs">—</strong><small id="status-scene">Sem informação</small></article>
+          <article><span>Câmera OBS</span><strong id="status-camera">—</strong><small>Fonte para o LIVE Manager</small></article>
+        </div>
+
+        <section class="control-card">
+          <span class="eyebrow">CONTROLE</span>
+          <h2>Preparar LIVE Manager</h2>
+          <p>Use os botões abaixo para preparar a sessão remota. O clique final em “Go LIVE” permanece no TikTok.</p>
+          <div class="controls">
+            <button id="open-manager" class="btn primary">Abrir LIVE Manager</button>
+            <button id="start-camera" class="btn">Iniciar Câmera OBS</button>
+            <button id="stop-camera" class="btn danger">Parar Câmera OBS</button>
+          </div>
+          <div id="scene-control" class="scene-control hidden">
+            <label><span>Cena do OBS</span><select id="scene-select"></select></label>
+            <button id="set-scene" class="btn">Trocar cena</button>
+          </div>
+        </section>
+
+        <details class="advanced">
+          <summary>Configuração da máquina</summary>
+          <div class="advanced-body">
+            <p>Se você perdeu o token de pareamento, gere um novo. Isso invalida o token antigo imediatamente.</p>
+            <button id="rotate-token" class="btn danger">Gerar novo token</button>
+            <h3>Últimos comandos</h3>
+            <div id="command-list" class="command-list"></div>
+          </div>
+        </details>
+      </section>
+    </main>
+  </div>
+
+  <div id="modal-backdrop" class="modal-backdrop hidden"><div id="modal" class="modal"></div></div>
+  <div id="toasts" class="toasts"></div>
+  <script src="/shop-cloud.js"></script>
+</body>
+</html>
