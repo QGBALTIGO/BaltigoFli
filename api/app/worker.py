@@ -30,6 +30,11 @@ def now_utc() -> datetime:
     return datetime.now(timezone.utc)
 
 
+def touch_worker_heartbeat() -> None:
+    path = settings.log_dir / "worker.heartbeat"
+    path.write_text(now_utc().isoformat(), encoding="utf-8")
+
+
 def stream_query():
     return select(StreamJob).options(
         selectinload(StreamJob.destination),
@@ -104,6 +109,7 @@ def mark_failure(job: StreamJob, message: str) -> None:
 
 
 def reconcile() -> None:
+    touch_worker_heartbeat()
     with SessionLocal() as db:
         jobs = db.scalars(stream_query()).all()
         current_ids = {job.id for job in jobs}
@@ -129,11 +135,14 @@ def reconcile() -> None:
                 continue
 
             if running and running.process.poll() is None:
-                job.status = "live"
+                alive_seconds = time.monotonic() - running.started_monotonic
+                job.status = "live" if alive_seconds >= settings.live_confirm_seconds else "starting"
                 job.worker_id = settings.worker_id
                 job.heartbeat_at = now_utc()
-                if not job.started_at:
+                if job.status == "live" and not job.started_at:
                     job.started_at = now_utc()
+                if alive_seconds >= 60:
+                    job.restart_count = 0
                 job.last_error = None
                 continue
 
@@ -166,8 +175,7 @@ def reconcile() -> None:
                 job.heartbeat_at = now_utc()
                 db.commit()
                 start_job(job)
-                job.status = "live"
-                job.started_at = job.started_at or now_utc()
+                job.status = "starting"
                 job.heartbeat_at = now_utc()
                 job.last_error = None
             except Exception as exc:
