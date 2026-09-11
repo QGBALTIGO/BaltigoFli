@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: "22"
       - name: Validate Python syntax
-        run: python -m compileall -q api/app
+        run: python -m compileall -q api/app shop-agent-windows
       - name: Validate dashboard JavaScript
         run: node --check web/app.js
       - name: Validate Docker Compose
