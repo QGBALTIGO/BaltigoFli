@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0a0b10" />
+  <title>Baltigo Live Cloud</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">B</span><div><strong>Baltigo</strong><small>Live Cloud</small></div></div>
+      <nav>
+        <button class="nav-item active" data-view="overview">⌂ <span>Visão geral</span></button>
+        <button class="nav-item" data-view="streams">● <span>Lives</span></button>
+        <button class="nav-item" data-view="media">▣ <span>Mídia</span></button>
+        <button class="nav-item" data-view="playlists">☷ <span>Playlists</span></button>
+        <button class="nav-item" data-view="destinations">↗ <span>Destinos</span></button>
+      </nav>
+      <div class="sidebar-footer"><div class="status-dot"></div><span>Cloud conectado</span></div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div><p class="eyebrow">CENTRAL DE TRANSMISSÃO</p><h1 id="page-title">Visão geral</h1></div>
+        <div class="top-actions">
+          <button class="btn ghost" id="api-key-btn">🔐 Acesso</button>
+          <button class="btn primary" id="new-stream-btn">＋ Nova live</button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-overview">
+        <div class="hero-panel">
+          <div><span class="pill live-pill">● CLOUD STREAMING</span><h2>Suas transmissões, rodando mesmo com seu computador desligado.</h2><p>Envie o vídeo, conecte um destino RTMP e deixe o worker cuidar da execução, loop e recuperação automática.</p></div>
+          <div class="hero-orbit"><span>LIVE</span></div>
+        </div>
+        <div class="stats-grid" id="stats-grid"></div>
+        <div class="section-head"><div><p class="eyebrow">AGORA</p><h2>Transmissões recentes</h2></div><button class="link-btn" data-go="streams">Ver todas →</button></div>
+        <div id="overview-streams" class="cards-grid"></div>
+      </section>
+
+      <section class="view" id="view-streams">
+        <div class="section-head"><div><p class="eyebrow">OPERAÇÃO</p><h2>Lives</h2></div><button class="btn primary" data-open="stream">＋ Criar transmissão</button></div>
+        <div id="streams-list" class="cards-grid"></div>
+      </section>
+
+      <section class="view" id="view-media">
+        <div class="section-head"><div><p class="eyebrow">BIBLIOTECA</p><h2>Mídia</h2></div><label class="btn primary file-label">＋ Enviar vídeo<input id="media-upload" type="file" accept="video/*" hidden /></label></div>
+        <div class="upload-progress hidden" id="upload-progress"><div></div><span>Enviando e analisando vídeo…</span></div>
+        <div id="media-list" class="cards-grid"></div>
+      </section>
+
+      <section class="view" id="view-playlists">
+        <div class="section-head"><div><p class="eyebrow">PROGRAMAÇÃO</p><h2>Playlists</h2></div><button class="btn primary" data-open="playlist">＋ Nova playlist</button></div>
+        <div id="playlists-list" class="cards-grid"></div>
+      </section>
+
+      <section class="view" id="view-destinations">
+        <div class="section-head"><div><p class="eyebrow">CONEXÕES</p><h2>Destinos RTMP</h2></div><button class="btn primary" data-open="destination">＋ Novo destino</button></div>
+        <div class="notice">🔒 A Stream Key é criptografada antes de ser armazenada e nunca é devolvida pela API.</div>
+        <div id="destinations-list" class="cards-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="modal-backdrop"><div class="modal" id="modal"></div></div>
+  <div class="toast-stack" id="toasts"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
