@@ -29,9 +29,23 @@
       <section id="live-banner" class="live-banner hidden"></section>
 
       <section class="intro">
-        <span class="eyebrow">CRIAR LIVE</span>
-        <h1>Coloque seu vídeo ao vivo em 3 passos.</h1>
-        <p>Você escolhe o vídeo, conecta o TikTok e clica em iniciar. Depois disso, o servidor continua sozinho.</p>
+        <span class="eyebrow">ESCOLHA O MODO</span>
+        <h1>Onde você quer fazer a LIVE?</h1>
+        <p>TikTok Shop usa o Shop Cloud com LIVE Manager e Câmera Virtual do OBS. O fluxo abaixo com Stream Key fica separado para LIVE comum e outras plataformas.</p>
+      </section>
+
+      <a class="shop-mode-card" href="/shop-cloud.html">
+        <div class="shop-mode-icon">🛍️</div>
+        <div><span class="eyebrow">TIKTOK SHOP</span><strong>Usar Shop Cloud</strong><small>Desktop Windows remoto + LIVE Manager oficial + OBS Virtual Camera. Não precisa de Stream Key.</small></div>
+        <span class="shop-mode-arrow">→</span>
+      </a>
+
+      <div class="rtmp-divider"><span>LIVE COMUM / RTMP</span></div>
+
+      <section class="intro compact-intro">
+        <span class="eyebrow">RTMP</span>
+        <h2>Coloque um vídeo ao vivo em 3 passos.</h2>
+        <p>Use esta parte apenas quando a plataforma fornecer Server URL + Stream Key.</p>
       </section>
 
       <section class="steps">
@@ -49,11 +63,11 @@
         <article class="step-card" id="tiktok-step">
           <div class="step-number">2</div>
           <div class="step-content">
-            <span class="step-label">TIKTOK</span>
-            <h2>Conecte sua conta</h2>
-            <div id="selected-destination" class="selection empty-selection">TikTok ainda não conectado</div>
-            <button id="connect-tiktok" class="btn secondary wide">Conectar TikTok</button>
-            <button id="where-key" class="help-link">Não sei onde encontrar a Stream Key</button>
+            <span class="step-label">DESTINO RTMP</span>
+            <h2>Conecte a plataforma</h2>
+            <div id="selected-destination" class="selection empty-selection">Nenhum destino conectado</div>
+            <button id="connect-tiktok" class="btn secondary wide">Adicionar RTMP</button>
+            <button id="where-key" class="help-link">Onde encontro Server URL e Stream Key?</button>
           </div>
         </article>
 
@@ -77,7 +91,7 @@
             <div id="media-list" class="simple-list"></div>
           </section>
           <section class="advanced-panel">
-            <div class="panel-title"><div><strong>Conexões</strong><small>Teste ou troque o destino de transmissão.</small></div></div>
+            <div class="panel-title"><div><strong>Conexões RTMP</strong><small>Teste ou troque o destino de transmissão.</small></div></div>
             <div id="destination-list" class="simple-list"></div>
           </section>
           <section class="advanced-panel full">
