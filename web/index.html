@@ -2,115 +2,95 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#0b0d12" />
   <title>Baltigo Live</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <div id="auth-screen" class="auth-screen hidden">
-    <div class="auth-card">
-      <div class="brand-row"><span class="brand-dot">B</span><div><strong>Baltigo Live</strong><small>Cloud streaming</small></div></div>
-      <div class="auth-copy">
-        <span class="kicker">ACESSO AO PAINEL</span>
-        <h1>Entre para gerenciar suas transmissões.</h1>
-        <p>Use a chave de administrador configurada no servidor. Ela fica salva apenas neste navegador.</p>
-      </div>
-      <form id="login-form" class="stack">
-        <label class="field"><span>Chave de acesso</span><input id="login-key" type="password" autocomplete="current-password" placeholder="ADMIN_API_KEY" required /></label>
-        <button class="btn primary wide" type="submit">Entrar no painel</button>
-        <div id="login-error" class="form-error hidden"></div>
-      </form>
-    </div>
-  </div>
+  <section id="auth" class="auth hidden">
+    <form id="login-form" class="login-card">
+      <div class="logo">B</div>
+      <h1>Baltigo Live</h1>
+      <p>Digite seu código de acesso para continuar.</p>
+      <label><span>Código de acesso</span><input id="login-key" type="password" required autocomplete="current-password" /></label>
+      <button class="btn primary big" type="submit">Entrar</button>
+      <small id="login-error" class="error hidden"></small>
+    </form>
+  </section>
 
-  <div id="app" class="app-shell hidden">
-    <aside class="sidebar">
-      <div class="brand-row sidebar-brand"><span class="brand-dot">B</span><div><strong>Baltigo Live</strong><small>Cloud streaming</small></div></div>
-      <nav class="nav">
-        <button class="nav-item active" data-view="overview"><span class="nav-icon">⌂</span><span>Visão geral</span></button>
-        <button class="nav-item" data-view="streams"><span class="nav-icon">●</span><span>Transmissões</span></button>
-        <button class="nav-item" data-view="media"><span class="nav-icon">▣</span><span>Mídia</span></button>
-        <button class="nav-item" data-view="playlists"><span class="nav-icon">☷</span><span>Playlists</span></button>
-        <button class="nav-item" data-view="destinations"><span class="nav-icon">↗</span><span>Destinos</span></button>
-      </nav>
-      <div class="sidebar-bottom">
-        <div id="sidebar-health" class="health-mini"><span class="status-led"></span><div><strong>Verificando...</strong><small>API e worker</small></div></div>
-        <button id="logout-btn" class="nav-item subtle"><span class="nav-icon">↪</span><span>Sair</span></button>
-      </div>
-    </aside>
+  <div id="app" class="hidden">
+    <header class="header">
+      <div class="brand"><div class="logo small-logo">B</div><div><strong>Baltigo Live</strong><small>Transmissão em nuvem</small></div></div>
+      <div class="header-right"><span id="cloud-status" class="cloud-status">Verificando...</span><button id="logout" class="link-btn">Sair</button></div>
+    </header>
 
-    <main class="main">
-      <header class="topbar">
-        <div>
-          <p class="kicker">CENTRAL DE TRANSMISSÃO</p>
-          <h1 id="page-title">Visão geral</h1>
-        </div>
-        <div class="top-actions">
-          <div id="system-pill" class="system-pill"><span class="status-led"></span><span>Conectando</span></div>
-          <button class="btn primary" id="top-new-stream">＋ Nova transmissão</button>
-        </div>
-      </header>
+    <main class="page">
+      <section id="live-banner" class="live-banner hidden"></section>
 
-      <section class="view active" id="view-overview">
-        <div id="system-warning"></div>
-        <section id="onboarding" class="onboarding hidden"></section>
-        <section class="stats" id="stats"></section>
-        <section class="panel">
-          <div class="panel-head"><div><span class="kicker">AGORA</span><h2>Transmissões</h2></div><button class="text-btn" data-go="streams">Ver todas →</button></div>
-          <div id="overview-streams"></div>
-        </section>
-        <section class="grid-2 overview-bottom">
-          <div class="panel">
-            <div class="panel-head"><div><span class="kicker">INFRAESTRUTURA</span><h2>Saúde do sistema</h2></div></div>
-            <div id="system-card"></div>
+      <section class="intro">
+        <span class="eyebrow">CRIAR LIVE</span>
+        <h1>Coloque seu vídeo ao vivo em 3 passos.</h1>
+        <p>Você escolhe o vídeo, conecta o TikTok e clica em iniciar. Depois disso, o servidor continua sozinho.</p>
+      </section>
+
+      <section class="steps">
+        <article class="step-card" id="video-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <span class="step-label">VÍDEO</span>
+            <h2>Escolha o vídeo</h2>
+            <div id="selected-video" class="selection empty-selection">Nenhum vídeo escolhido</div>
+            <label class="btn secondary wide upload-button">Enviar vídeo<input id="video-upload" type="file" accept="video/*" hidden /></label>
+            <div id="upload-progress" class="progress hidden"><div class="progress-top"><span id="upload-text">Enviando...</span><strong id="upload-percent">0%</strong></div><div class="track"><div id="upload-bar"></div></div></div>
           </div>
-          <div class="panel">
-            <div class="panel-head"><div><span class="kicker">ATALHOS</span><h2>O que você quer fazer?</h2></div></div>
-            <div class="quick-actions">
-              <button class="quick-card" data-open="destination"><strong>Conectar destino</strong><span>Cadastre TikTok, YouTube ou outro RTMP</span></button>
-              <button class="quick-card" data-go="media"><strong>Enviar vídeo</strong><span>O arquivo é preparado automaticamente</span></button>
-              <button class="quick-card" data-open="stream"><strong>Criar transmissão</strong><span>Escolha fonte, destino e quando iniciar</span></button>
-            </div>
+        </article>
+
+        <article class="step-card" id="tiktok-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <span class="step-label">TIKTOK</span>
+            <h2>Conecte sua conta</h2>
+            <div id="selected-destination" class="selection empty-selection">TikTok ainda não conectado</div>
+            <button id="connect-tiktok" class="btn secondary wide">Conectar TikTok</button>
+            <button id="where-key" class="help-link">Não sei onde encontrar a Stream Key</button>
           </div>
-        </section>
+        </article>
+
+        <article class="step-card start-card" id="start-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <span class="step-label">PRONTO</span>
+            <h2>Inicie sua LIVE</h2>
+            <p id="ready-text" class="ready-text">Complete os passos 1 e 2.</p>
+            <button id="start-live" class="btn primary huge" disabled>▶ Iniciar LIVE agora</button>
+            <small>O vídeo será repetido automaticamente até você parar.</small>
+          </div>
+        </article>
       </section>
 
-      <section class="view" id="view-streams">
-        <div class="section-head"><div><p class="section-copy">Acompanhe o estado real do worker, reinícios e erros sem precisar abrir o servidor.</p></div><button class="btn primary" data-open="stream">＋ Nova transmissão</button></div>
-        <div class="filter-row"><button class="filter active" data-stream-filter="all">Todas</button><button class="filter" data-stream-filter="live">Ao vivo</button><button class="filter" data-stream-filter="scheduled">Agendadas</button><button class="filter" data-stream-filter="problem">Com problema</button></div>
-        <div id="streams-list" class="stack gap12"></div>
-      </section>
-
-      <section class="view" id="view-media">
-        <div class="section-head"><div><p class="section-copy">Envie qualquer vídeo comum. O sistema converte para H.264/AAC e deixa pronto para RTMP.</p></div></div>
-        <label id="upload-zone" class="upload-zone">
-          <input id="media-upload" type="file" accept="video/*" hidden />
-          <div class="upload-icon">↑</div>
-          <strong>Enviar vídeo</strong>
-          <span>MP4, MOV, MKV, M4V, WEBM ou AVI</span>
-          <small id="upload-limit">Preparando limite...</small>
-        </label>
-        <div id="upload-progress" class="upload-progress hidden"><div class="upload-top"><strong id="upload-name">Enviando...</strong><span id="upload-percent">0%</span></div><div class="progress-track"><div id="upload-bar"></div></div><small id="upload-status">Transferindo arquivo</small></div>
-        <div class="toolbar"><div><strong id="media-count">0 vídeos</strong><span class="muted"> · todos são normalizados para streaming</span></div></div>
-        <div id="media-list" class="media-grid"></div>
-      </section>
-
-      <section class="view" id="view-playlists">
-        <div class="section-head"><div><p class="section-copy">Monte uma sequência contínua. Para estabilidade, uma playlist usa vídeos da mesma orientação.</p></div><button class="btn primary" data-open="playlist">＋ Nova playlist</button></div>
-        <div id="playlists-list" class="cards-grid"></div>
-      </section>
-
-      <section class="view" id="view-destinations">
-        <div class="section-head"><div><p class="section-copy">A chave nunca volta para o navegador depois de salva. Você pode testar se o servidor RTMP está alcançável sem iniciar uma LIVE.</p></div><button class="btn primary" data-open="destination">＋ Novo destino</button></div>
-        <div id="destinations-list" class="cards-grid"></div>
-      </section>
+      <details class="advanced">
+        <summary>Mais opções</summary>
+        <div class="advanced-grid">
+          <section class="advanced-panel">
+            <div class="panel-title"><div><strong>Meus vídeos</strong><small>Escolha ou exclua arquivos já enviados.</small></div></div>
+            <div id="media-list" class="simple-list"></div>
+          </section>
+          <section class="advanced-panel">
+            <div class="panel-title"><div><strong>Conexões</strong><small>Teste ou troque o destino de transmissão.</small></div></div>
+            <div id="destination-list" class="simple-list"></div>
+          </section>
+          <section class="advanced-panel full">
+            <div class="panel-title"><div><strong>Transmissões anteriores</strong><small>Veja o estado, pare ou abra os logs.</small></div></div>
+            <div id="stream-list" class="simple-list"></div>
+          </section>
+        </div>
+      </details>
     </main>
   </div>
 
-  <div id="drawer-backdrop" class="drawer-backdrop hidden"><aside id="drawer" class="drawer"><div id="drawer-content"></div></aside></div>
   <div id="modal-backdrop" class="modal-backdrop hidden"><div id="modal" class="modal"></div></div>
-  <div id="toasts" class="toast-stack"></div>
+  <div id="toasts" class="toasts"></div>
   <script src="/app.js"></script>
 </body>
 </html>
