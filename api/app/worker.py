@@ -141,6 +141,14 @@ def reconcile() -> None:
                 exit_code = running.process.returncode
                 running.log_handle.close()
                 processes.pop(job.id, None)
+                if exit_code == 0 and not job.loop:
+                    job.desired_state = "stopped"
+                    job.status = "stopped"
+                    job.stopped_at = now_utc()
+                    job.worker_id = settings.worker_id
+                    job.heartbeat_at = now_utc()
+                    job.last_error = None
+                    continue
                 mark_failure(job, f"FFmpeg exited with code {exit_code}")
 
             delay = min(settings.restart_max_seconds, settings.restart_base_seconds * (2 ** min(job.restart_count, 5)))
