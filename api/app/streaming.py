@@ -5,13 +5,20 @@ from .config import settings
 
 
 def output_url(rtmp_url: str, stream_key: str) -> str:
+    rtmp_url = rtmp_url.strip()
+    stream_key = stream_key.strip()
     if "{stream_key}" in rtmp_url:
         return rtmp_url.replace("{stream_key}", stream_key)
+    if not stream_key:
+        return rtmp_url
     return f"{rtmp_url.rstrip('/')}/{stream_key.lstrip('/')}"
 
 
 def build_ffmpeg_command(input_path: Path, destination_url: str, loop: bool, concat: bool = False) -> list[str]:
-    cmd = ["ffmpeg", "-hide_banner", "-nostdin", "-loglevel", "warning", "-re"]
+    cmd = [
+        "ffmpeg", "-hide_banner", "-nostdin", "-loglevel", "warning",
+        "-stats_period", "5", "-rw_timeout", "15000000", "-re",
+    ]
     if loop:
         cmd += ["-stream_loop", "-1"]
     if concat:
@@ -22,14 +29,14 @@ def build_ffmpeg_command(input_path: Path, destination_url: str, loop: bool, con
     if settings.stream_transcode:
         cmd += [
             "-c:v", "libx264", "-preset", "veryfast", "-pix_fmt", "yuv420p",
-            "-r", str(settings.output_fps), "-b:v", settings.video_bitrate,
-            "-maxrate", settings.video_bitrate, "-bufsize", "9000k",
-            "-c:a", "aac", "-b:a", settings.audio_bitrate, "-ar", "44100",
+            "-r", str(settings.output_fps), "-g", str(settings.output_fps * 2),
+            "-b:v", settings.video_bitrate, "-maxrate", settings.video_bitrate, "-bufsize", "9000k",
+            "-c:a", "aac", "-b:a", settings.audio_bitrate, "-ar", "44100", "-ac", "2",
         ]
     else:
         cmd += ["-c", "copy"]
 
-    cmd += ["-f", "flv", destination_url]
+    cmd += ["-flvflags", "no_duration_filesize", "-f", "flv", destination_url]
     return cmd
 
 
