@@ -19,7 +19,9 @@ jobs:
       - name: Validate Python syntax
         run: python -m compileall -q api/app shop-agent-windows
       - name: Validate dashboard JavaScript
-        run: node --check web/app.js
+        run: |
+          node --check web/app.js
+          node --check web/shop-cloud.js
       - name: Validate Docker Compose
         run: |
           cp .env.example .env
