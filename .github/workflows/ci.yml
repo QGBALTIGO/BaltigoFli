@@ -13,6 +13,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python -m compileall -q api/app
-      - run: cp .env.example .env
-      - run: docker compose config >/dev/null
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate Python syntax
+        run: python -m compileall -q api/app
+      - name: Validate dashboard JavaScript
+        run: node --check web/app.js
+      - name: Validate Docker Compose
+        run: |
+          cp .env.example .env
+          docker compose config >/dev/null
